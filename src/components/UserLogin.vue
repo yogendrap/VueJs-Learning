@@ -1,10 +1,10 @@
 <template>
 <div>
     <GoogleLogin v-if="!isLogin" :params="params" :renderParams="renderParams" :onSuccess="onSuccess" :onFailure="onFailure"></GoogleLogin>
-    <div class="logout" v-if="isLogin">
+    <!-- <div class="logout" v-if="isLogin">
       welcome {{userName}}
        <button v-on:click="logout">Logout</button>
-    </div>
+    </div> -->
     </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     GoogleLogin
   },
     beforeCreate() {
-    console.log('Nothing gets called before me!')
+   // console.log('Nothing gets called before me!')
     if(localStorage.getItem('ac_token') == null) {
         this.isLogin = false;
     }
@@ -46,7 +46,7 @@ export default {
             const profile = googleUser.getBasicProfile();
             this.userName = profile.getName();
             localStorage.setItem('userName', profile.getName());
-            
+            this.$router.push('profile');
         },
         onFailure(googleUser) {
             console.log(googleUser);
@@ -61,14 +61,4 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-.form-wrapper {
-  width: 100%;
-  margin: auto;
-}
-
-.text-field {
-  padding: 5px;
-  margin: 10px;
-}
-</style>
+<style></style>
