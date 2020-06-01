@@ -1,5 +1,11 @@
 <template>
-    <GoogleLogin :params="params" :renderParams="renderParams" :onSuccess="onSuccess" :onFailure="onFailure"></GoogleLogin>
+<div>
+    <GoogleLogin v-if="!isLogin" :params="params" :renderParams="renderParams" :onSuccess="onSuccess" :onFailure="onFailure"></GoogleLogin>
+    <div class="logout" v-if="isLogin">
+      welcome {{userName}}
+       <button v-on:click="logout">Logout</button>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -10,14 +16,20 @@ export default {
   components: {
     GoogleLogin
   },
-
+    beforeCreate() {
+    console.log('Nothing gets called before me!')
+    if(localStorage.getItem('ac_token') == null) {
+        this.isLogin = false;
+    }
+  },
   data() {
     return {
+      userName: '',
+      isLogin : this.isLogin == undefined ? true : false,
       // client_id is the only required property but you can add several more params, full list down bellow on the Auth api section
       params: {
         client_id: "712428694771-kmku1htdf3287e3cc34i9aalkgujqns6.apps.googleusercontent.com"
       },
-      // only needed if you want to render the button with the google ui
       renderParams: {
         width: 250,
         height: 50,
@@ -28,16 +40,21 @@ export default {
 
    methods: {
         onSuccess(googleUser) {
-            console.log(googleUser);
- 
-            // This only gets the user information: id, name, imageUrl and email
-            console.log(googleUser.getBasicProfile());
+            const userID =  googleUser.getId();
+            localStorage.setItem('ac_token', userID);
+            this.isLogin = true;
+            const profile = googleUser.getBasicProfile();
+            this.userName = profile.getName();
+            localStorage.setItem('userName', profile.getName());
+            
         },
         onFailure(googleUser) {
             console.log(googleUser);
- 
-            // This only gets the user information: id, name, imageUrl and email
             console.log(googleUser.getBasicProfile());
+        },
+        logout(){
+          localStorage.removeItem("ac_token");
+          this.isLogin = false;
         }
     }
 };
