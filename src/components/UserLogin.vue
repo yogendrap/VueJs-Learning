@@ -1,31 +1,26 @@
 <template>
 <div>
+  <AppNavigation></AppNavigation>
     <GoogleLogin v-if="!isLogin" :params="params" :renderParams="renderParams" :onSuccess="onSuccess" :onFailure="onFailure"></GoogleLogin>
-    <!-- <div class="logout" v-if="isLogin">
-      welcome {{userName}}
-       <button v-on:click="logout">Logout</button>
-    </div> -->
     </div>
 </template>
 
 <script>
 import GoogleLogin from "vue-google-login";
+import { isLoggedIn } from "../utils/auth";
+import AppNavigation  from './AppNavigation';
 
 export default {
   name: "UserLogin",
   components: {
-    GoogleLogin
-  },
-    beforeCreate() {
-   // console.log('Nothing gets called before me!')
-    if(localStorage.getItem('ac_token') == null) {
-        this.isLogin = false;
-    }
+    GoogleLogin,
+    AppNavigation
   },
   data() {
     return {
+      userInfo: {}, 
       userName: '',
-      isLogin : this.isLogin == undefined ? true : false,
+      isLogin : isLoggedIn(),
       // client_id is the only required property but you can add several more params, full list down bellow on the Auth api section
       params: {
         client_id: "712428694771-kmku1htdf3287e3cc34i9aalkgujqns6.apps.googleusercontent.com"
@@ -43,19 +38,23 @@ export default {
             const userID =  googleUser.getId();
             localStorage.setItem('ac_token', userID);
             this.isLogin = true;
-            const profile = googleUser.getBasicProfile();
-            this.userName = profile.getName();
-            localStorage.setItem('userName', profile.getName());
-            this.$router.push('profile');
+            this.setUserProfile(googleUser);
+            this.$router.push('dashboard');
         },
         onFailure(googleUser) {
             console.log(googleUser);
             console.log(googleUser.getBasicProfile());
         },
-        logout(){
-          localStorage.removeItem("ac_token");
-          this.isLogin = false;
+
+        setUserProfile(googleUser) {
+            const profile = googleUser.getBasicProfile();
+            this.userInfo.name = profile.getName();
+            this.userInfo.mail = profile.getEmail();
+            this.userInfo.photo = profile.getImageUrl();
+            localStorage.setItem('userInfo', JSON.stringify(this.userInfo));
+            //console.log(localStorage.getItem("userInfo"));
         }
+
     }
 };
 </script>

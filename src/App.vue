@@ -1,13 +1,18 @@
 <template>
   <div id="app">
+    <!-- <AppNavigation></AppNavigation> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 
+
 export default {
   name: 'App',
+  // components: {
+  //   AppNavigation
+  // }
 }
 </script>
 

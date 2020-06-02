@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import UserLogin from '@/components/UserLogin';
-import UserProfile from '@/components/UserProfile';
-import { requireAuth } from '../utils/auth';
+import DashBoard from '@/components/DashBoard';
+import { requireAuth, authNotRequired } from '../utils/auth';
 
 Vue.use(Router);
 
@@ -12,13 +12,14 @@ export default new Router({
     {
       path: '/',
       name: 'Login Page',
+      beforeEnter: authNotRequired,
       component: UserLogin,
     },
     {
-      path: '/profile',
-      name: 'Profile',
+      path: '/dashboard',
+      name: 'Dashboard',
       beforeEnter: requireAuth,
-      component: UserProfile,
+      component: DashBoard,
     },
   ],
 });
