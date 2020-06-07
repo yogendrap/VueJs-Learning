@@ -12,6 +12,7 @@
     "core-js": "^3.6.4",
     "jquery": "^3.5.1",
     "vue": "^2.6.11",
+    "vue-google-api": "^0.2.0",
     "vue-google-login": "^2.0.5",
     "vue-router": "^3.3.2"
   },

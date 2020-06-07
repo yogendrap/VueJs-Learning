@@ -16,7 +16,17 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import AppNavigation  from './AppNavigation';
+import VueGoogleApi from 'vue-google-api';
+
+const config = {
+  apiKey: 'AIzaSyBUps2WkElVn1sucLsekVxGk9VkJc91fOo',
+  clientId: '712428694771-kmku1htdf3287e3cc34i9aalkgujqns6.apps.googleusercontent.com',
+  scope: 'https://mail.google.com, https://www.googleapis.com/auth/gmail.readonly, https://www.googleapis.com/auth/gmail.metadata'
+}
+
+Vue.use(VueGoogleApi, config)
 
 export default {
   name: "DashBoard",
@@ -26,12 +36,27 @@ export default {
   data() {
     return {
       userInfo: JSON.parse(localStorage.getItem("userInfo")),
-      imageUrl: JSON.parse(localStorage.getItem("userInfo")).photo
+      imageUrl: JSON.parse(localStorage.getItem("userInfo")).photo,
+      userData: this.getDetails()
     };
   },
 
    methods: {
-     
+
+     getDetails() {
+       let access_token = localStorage.getItem('ac_token');
+       console.log(access_token);
+       this.$gapi.request({
+          path: 'https://www.googleapis.com/gmail/v1/users/me/messages',
+          method: 'GET',
+          headers: {
+             Authorization: 'Bearer ' + access_token
+          }
+            
+        }).then(response => {
+            console.log(response)
+          })
+      } 
     }
 };
 </script>
