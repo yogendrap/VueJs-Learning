@@ -12,7 +12,9 @@
    Email {{userInfo.mail}}
 <br>
    profile Image: <img :src="imageUrl"/>
+{{mailIds}}
     </div>
+
 </template>
 
 <script>
@@ -37,7 +39,7 @@ export default {
     return {
       userInfo: JSON.parse(localStorage.getItem("userInfo")),
       imageUrl: JSON.parse(localStorage.getItem("userInfo")).photo,
-      userData: this.getDetails()
+      mailIds: ''
     };
   },
 
@@ -45,18 +47,30 @@ export default {
 
      getDetails() {
        let access_token = localStorage.getItem('ac_token');
-       console.log(access_token);
+        console.log(access_token);
        this.$gapi.request({
           path: 'https://www.googleapis.com/gmail/v1/users/me/messages',
           method: 'GET',
+          params: {
+            maxResults: 2,
+            q: 'unsubscribe is:unread  category:promotions',
+          },
+          
           headers: {
              Authorization: 'Bearer ' + access_token
           }
             
         }).then(response => {
-            console.log(response)
+          console.log("I am in response");
+            this.mailIds = response;
+          }, error => {
+            console.log("I am in error");
           })
       } 
+    },
+    mounted()  {
+      console.log("I am here in mounted");
+      this.getDetails();
     }
 };
 </script>

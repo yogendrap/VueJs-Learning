@@ -24,7 +24,7 @@ export default {
       // client_id is the only required property but you can add several more params, full list down bellow on the Auth api section
       params: {
         client_id: "712428694771-kmku1htdf3287e3cc34i9aalkgujqns6.apps.googleusercontent.com",
-        scope: 'profile email https://mail.google.com https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.metadata'
+        scope: 'profile email https://mail.google.com https://www.googleapis.com/auth/gmail.readonly'
       },
       renderParams: {
         width: 250,
