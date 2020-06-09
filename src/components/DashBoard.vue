@@ -64,7 +64,7 @@ export default {
           console.log("I am in response");
             this.mailIds = response;
           }, error => {
-            console.log("I am in error");
+            console.log(error);
           })
       } 
     },

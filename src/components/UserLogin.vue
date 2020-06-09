@@ -1,7 +1,10 @@
 <template>
 <div>
   <AppNavigation></AppNavigation>
+  <b-card-body>
     <GoogleLogin v-if="!isLogin" :params="params" :renderParams="renderParams" :onSuccess="onSuccess" :onFailure="onFailure"></GoogleLogin>
+    
+  </b-card-body>
     </div>
 </template>
 
